@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Container, Divider, Grid, Header, Image, Menu, Segment } from 'semantic-ui-react'
+import React from 'react';
+import { Container, Divider, Header } from 'semantic-ui-react'
 import DataInput from '../components/calc/data_input/DataInput';
 import DataOutput from '../components/calc/data_output/DataOutput';
 
