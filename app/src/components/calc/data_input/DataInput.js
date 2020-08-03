@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Form } from 'semantic-ui-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateCalcInput } from '../../../store/actions/calcActions';
 
 const DataInput = (props) => {
+
+    const dispatch = useDispatch();
 
     const inflationControlLabel = 'Учитывать инфляцию'
     const inflationValueLabel = 'Среднегодовая инфляция'
@@ -22,7 +26,23 @@ const DataInput = (props) => {
     const [ depositRate, setDepositRate ] = useState(0);
     const [ inflationValue, setInflationValue ] = useState(0);
 
-    console.log(mortgageRate, inflationControl);
+    useEffect(() => {
+        const inputData = {
+            inflationControl: inflationControl,
+            mortgageRate: parseFloat(mortgageRate),
+            mortgagePeriod: parseFloat(mortgagePeriod),
+            assetPrice: parseFloat(assetPrice),
+            rentPrice: parseFloat(rentPrice),
+            rentCoef: parseFloat(rentCoef),
+            depositRate: parseFloat(depositRate),
+            inflationValue: parseFloat(inflationValue),
+        }
+        dispatch(updateCalcInput(inputData));
+    }, [
+        dispatch, 
+        inflationControl, mortgageRate, mortgagePeriod, assetPrice, 
+        rentPrice, rentCoef, depositRate, inflationValue,
+    ]);
 
     return (
         <Form>

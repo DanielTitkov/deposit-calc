@@ -1,17 +1,16 @@
 const initState = {
+    inputData: null,
     error: null,
     loading: false,
 }
 
 const calcReducer = (state=initState, action) => {
     switch (action.type) {
-        // case "SET_ACTIVE_SHEET":
-        //     return {
-        //         ...state,
-        //         activeSheet: action.sheet && action.sheet.blueprint ? ({
-        //             ...action.sheet
-        //         }) : null
-        //     };
+        case "UPDATE_CALC_INPUT":
+            return {
+                ...state,
+                inputData: action.data,
+            };
         case "SET_LOADING":
             return {
                 ...state,
