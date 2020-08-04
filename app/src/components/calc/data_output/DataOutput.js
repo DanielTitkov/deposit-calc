@@ -1,44 +1,43 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import DataOutputTable from '../data_output_table/DataOutputTable';
-import { round, calculateMonthlyLoanPayment } from '../../../helper/math';
-import { Header, Grid, Popup, Icon } from 'semantic-ui-react';
+import { round, calculateMonthlyLoanPayment, calculateDepositSums } from '../../../helper/math';
+import { Grid } from 'semantic-ui-react';
 import DataOutputTableBlock from '../data_output_table_block/DataOutputTableBlock';
 
 const DataOutput = () => {
 
     const inputData = useSelector(state => state.calc.inputData);
 
+    // input fields
     const assetPrice = inputData && inputData['assetPrice'];
     const mortgageRate = inputData && inputData['mortgageRate'];
     const mortgagePeriod = inputData && inputData['mortgagePeriod'];
     const rentPrice = inputData && inputData['rentPrice'];
 
     // mortgage
-    const monthlyDepositRate = round(inputData && inputData['depositRate'] / 12, 5);
     const monthlyMortgagePayment = round(calculateMonthlyLoanPayment(assetPrice, mortgagePeriod, mortgageRate), 3); 
     const totalMortgagePayment = round(monthlyMortgagePayment * mortgagePeriod * 12);
     const mortgageOverpayment = totalMortgagePayment - assetPrice;
     const assetOverpaymentPerc = round(mortgageOverpayment / assetPrice, 4);
     
     // deposit and rent
-    const mothlyDepositContribution = monthlyMortgagePayment - rentPrice;
-    const depositContributionSum = mothlyDepositContribution * mortgagePeriod * 12;
+    const monthlyDepositContribution = monthlyMortgagePayment - rentPrice;
+    const depositContributionSum = monthlyDepositContribution * mortgagePeriod * 12;
     const rentPaymentsSum = rentPrice * mortgagePeriod * 12;
+    const monthlyDepositRate = round(inputData && inputData['depositRate'] / 12, 5);
+    const depositSums = calculateDepositSums(mortgagePeriod, monthlyDepositRate, monthlyDepositContribution)
+    const depositResult = depositSums[depositSums.length-1];
+    const depositIncome = depositResult - depositContributionSum;
 
     // asset payback
     const mortgageAssetPayback = round(totalMortgagePayment / rentPrice / 12, 1);
     const pureAssetPayback = round(assetPrice / rentPrice / 12, 1);
 
-    // const [ inflationControl, setInflationControl ] = useState(false);
-    // const [ mortgageRate, setMortgageRate ] = useState(0.08);
-    // const [ mortgagePeriod, setMortgagePeriod ] = useState(10);
-    // const [ assetPrice, setAssetPrice ] = useState(0);
-    // const [ rentPrice, setRentPrice ] = useState(0);
-    // const [ rentCoef, setRentCoef ] = useState(0);
-    // const [ depositRate, setDepositRate ] = useState(0.04);
-    // const [ inflationValue, setInflationValue ] = useState(0);
+    // asset and deposit
+    const assetCoveringPerc = round(depositResult / assetPrice, 3);
+    const assetCoveringRemainder = depositResult - assetPrice;
 
+    // outputs
     const mortgageData = {
         monthlyMortgagePayment: {
             label: "Ежемесячный платеж по ипотеке",
@@ -68,9 +67,9 @@ const DataOutput = () => {
         //     value: monthlyDepositRate,
         //     format: "perc",
         // },
-        mothlyDepositContribution: {
+        monthlyDepositContribution: {
             label: "Рассчетный размер взноса на вклад",
-            value: mothlyDepositContribution,
+            value: monthlyDepositContribution,
             format: "money",
         }, 
         depositContributionSum: {
@@ -81,6 +80,16 @@ const DataOutput = () => {
         rentPaymentsSum: {
             label: "Сумма расходов на аренду",
             value: rentPaymentsSum,
+            format: "money",
+        },
+        depositResult: {
+            label: "Итог на вкладе (с учетом процентов)",
+            value: depositResult,
+            format: "money",
+        },
+        depositIncome: {
+            label: "Доход по вкладу",
+            value: depositIncome,
             format: "money",
         },
     }
@@ -96,6 +105,19 @@ const DataOutput = () => {
         },
     }
 
+    const assetDepositData = {
+        assetCoveringPerc: {
+            label: "Покрытие стоимости актива вкладом",
+            value: assetCoveringPerc,
+            format: "perc",
+        },
+        assetCoveringRemainder: {
+            label: "Остаток/дефицит",
+            value: assetCoveringRemainder,
+            format: "money",
+        },
+    }
+
     return (
         <>
             <Grid stackable>
@@ -104,12 +126,12 @@ const DataOutput = () => {
                     <Grid.Column>
                         <DataOutputTableBlock
                             data={ mortgageData } 
-                            tableColor="pink"
+                            tableColor="orange"
                             headerText="Ипотека"
                             tooltipText="Если мы используем ипотечный кредит для оплаты актива, то какой будет переплата?"
                         />
                     </Grid.Column>
-                    
+
                     <Grid.Column>
                         <DataOutputTableBlock
                             data={ depositData } 
@@ -124,10 +146,20 @@ const DataOutput = () => {
                     <Grid.Column>
                         <DataOutputTableBlock
                             data={ paybackData } 
-                            tableColor="blue"
+                            tableColor="violet"
                             headerText="Окупаемость актива"
-                            tooltipText="Если мы будем сдавать актив с той же самой ставкой за аренду, 
+                            tooltipText="Если мы будем сдавать актив в аренду с той же самой ставкой, 
                                 то за сколько лет он окупится?"
+                        />
+                    </Grid.Column>
+
+                    <Grid.Column>
+                        <DataOutputTableBlock
+                            data={ assetDepositData } 
+                            tableColor="blue"
+                            headerText="Актив и вклад"
+                            tooltipText="Покроет ли сумма на вкладе стоимость актива? 
+                                Сколько еще останется или надо будет доплатить?"
                         />
                     </Grid.Column>
 
