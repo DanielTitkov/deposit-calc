@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form } from 'semantic-ui-react';
+import { Form, Header } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateCalcInput } from '../../../store/actions/calcActions';
 
@@ -14,17 +14,26 @@ const DataInput = (props) => {
     const depositRateLabel = 'Ставка по вкладу'
     const assetPriceLabel = 'Цена актива (руб)'
     const rentPriceLabel = 'Месяц аренды'
-    const rentCoefLabel = 'Коэффициент аренды'
-    const submitButtonLabel = 'Пересчитать'
+    const rentCoefLabel = 'Коэффициент стоимости аренды'
 
     const [ inflationControl, setInflationControl ] = useState(false);
-    const [ mortgageRate, setMortgageRate ] = useState(0);
-    const [ mortgagePeriod, setMortgagePeriod ] = useState(0);
-    const [ assetPrice, setAssetPrice ] = useState(0);
-    const [ rentPrice, setRentPrice ] = useState(0);
-    const [ rentCoef, setRentCoef ] = useState(0);
-    const [ depositRate, setDepositRate ] = useState(0);
+    const [ mortgageRate, setMortgageRate ] = useState(0.08);
+    const [ mortgagePeriod, setMortgagePeriod ] = useState(15);
+    const [ assetPrice, setAssetPrice ] = useState(5000000);
+    const [ rentPrice, setRentPrice ] = useState(25000);
+    const [ rentCoef, setRentCoef ] = useState(0.005);
+    const [ depositRate, setDepositRate ] = useState(0.04);
     const [ inflationValue, setInflationValue ] = useState(0);
+
+    const handleRentPriceChange = (e) => {
+        setRentPrice(e.target.value);
+        setRentCoef(e.target.value / assetPrice)
+    }
+
+    const handleRentCoefChange = (e) => {
+        setRentCoef(e.target.value);
+        setRentPrice(e.target.value * assetPrice)
+    }
 
     useEffect(() => {
         const inputData = {
@@ -75,21 +84,24 @@ const DataInput = (props) => {
                     value={ assetPrice }
                     onChange={ e => setAssetPrice(e.target.value) }
                 />
-                <Form.Input 
-                    fluid 
-                    label={rentPriceLabel} 
-                    placeholder={rentPriceLabel}
-                    value={ rentPrice }
-                    onChange={ e => setRentPrice(e.target.value) }
-                />
-                <Form.Input 
-                    fluid 
-                    label={rentCoefLabel} 
-                    placeholder={rentCoefLabel}
-                    value={ rentCoef }
-                    onChange={ e => setRentCoef(e.target.value) }
-                />
             </Form.Group>
+            <Form.Group widths='equal'>
+                <Form.Input 
+                        fluid 
+                        label={rentPriceLabel} 
+                        placeholder={rentPriceLabel}
+                        value={ rentPrice }
+                        onChange={ handleRentPriceChange }
+                    />
+                    <Header as="h3">или</Header>
+                    <Form.Input 
+                        fluid
+                        label={rentCoefLabel}
+                        placeholder={rentCoefLabel}
+                        value={rentCoef}
+                        onChange={ handleRentCoefChange }
+                    />
+                </Form.Group>
             <Form.Group inline>
                 <Form.Checkbox 
                     label={inflationControlLabel} 
@@ -104,7 +116,15 @@ const DataInput = (props) => {
                     onChange={ e => setInflationValue(e.target.value) }
                 />
             </Form.Group>
-            <Form.Button>{submitButtonLabel}</Form.Button>
+            {/* <Form.Group inline>
+                <Form.Checkbox 
+                    label={inflationControlLabel} 
+                    checked={ inflationControl }
+                    onChange={ e => setInflationControl(!inflationControl) }
+                />
+            </Form.Group> */}
+            <p><i>Вид платежей по ипотеке: аннуитетные</i></p>
+            <p><i>Вид процентов по вкладу: ежем. капитализация</i></p>
         </Form>
     )
 }
