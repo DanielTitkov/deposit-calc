@@ -12,7 +12,7 @@ compilecfg:
 	$(CFG_COMPILE_IGNORE) envsubst < ./${CFG_ROOT}/${CFG_TEMPLATE} > ./${CFG_ROOT}/${CFG_COMPILED}
 
 .PHONY: predeploy
-predeploy: compilecfg build
+predeploy: build
 	echo done predeploy
 
 .PHONY: ci
