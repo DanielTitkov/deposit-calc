@@ -1,0 +1,22 @@
+language: node_js
+node_js:
+  - 10.19.0
+cache: npm
+
+branches:
+  only:
+    - "master"
+
+install:
+  - make ci
+
+script: 
+  - make predeploy
+
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN
+  local-dir: app/build
+  on:
+    branch: master
