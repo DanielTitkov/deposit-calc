@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Header } from 'semantic-ui-react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { updateCalcInput } from '../../../store/actions/calcActions';
 import './DataInput.css';
 
@@ -17,8 +17,8 @@ const DataInput = (props) => {
     const rentPriceLabel = 'Месяц аренды'
     const rentCoefLabel = 'Коэффициент стоимости аренды'
 
-    const [ inflationControl, setInflationControl ] = useState(false);
-    const [ inflationValue, setInflationValue ] = useState(0);
+    const [ inflationControl ] = useState(false);
+    const [ inflationValue ] = useState(0);
     const [ mortgageRate, setMortgageRate ] = useState(0.08);
     const [ mortgagePeriod, setMortgagePeriod ] = useState(15);
     const [ assetPrice, setAssetPrice ] = useState(5000000);

@@ -1,5 +1,5 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { round, calculateMonthlyLoanPayment, calculateDepositSums } from '../../../helper/math';
 import { Grid } from 'semantic-ui-react';
 import DataOutputTableBlock from '../data_output_table_block/DataOutputTableBlock';
