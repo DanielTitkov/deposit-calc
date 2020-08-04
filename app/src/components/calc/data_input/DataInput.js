@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Header } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateCalcInput } from '../../../store/actions/calcActions';
+import './DataInput.css';
 
 const DataInput = (props) => {
 
@@ -93,7 +94,7 @@ const DataInput = (props) => {
                         value={ rentPrice }
                         onChange={ handleRentPriceChange }
                     />
-                    <Header as="h3">или</Header>
+                    <Header as="h3" textAlign='center' className="data-input-inputs-separator">или</Header>
                     <Form.Input 
                         fluid
                         label={rentCoefLabel}

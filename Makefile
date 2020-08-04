@@ -31,9 +31,9 @@ run:
 test: 
 	echo TESTING
 
-.PHONY: storybook
-storybook:
-	cd $(PROJECT_ROOT) && npm run storybook
+.PHONY: gh
+gh:
+	cd $(PROJECT_ROOT) && npm run deploy
 
 .env: # must not fail if .env is not present
 	touch $@

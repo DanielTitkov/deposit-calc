@@ -1,7 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Home from './pages/Home';
+import { useDispatch } from 'react-redux';
+import { getCurrentUser } from './store/actions/userActions';
 
-function App() {
+const App = () => {
+
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		dispatch(getCurrentUser());
+	}, [dispatch])
+
   return (
     <div className="App">
       <Home />

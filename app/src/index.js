@@ -6,7 +6,10 @@ import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import rootReducer from './store/reducers/rootReducer';
 import ProviderWrapper from './Provider';
-import 'semantic-ui-css/semantic.min.css'
+import bridge from '@vkontakte/vk-bridge';
+import 'semantic-ui-css/semantic.min.css';
+
+bridge.send("VKWebAppInit", {}); 
 
 const store = createStore(
     rootReducer,

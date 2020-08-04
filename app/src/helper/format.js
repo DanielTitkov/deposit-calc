@@ -11,6 +11,7 @@ export const asFormat = (n, format) => {
         money: asMoney,
         perc: asPerc,
     }
+    const result = formats[format] ? formats[format](n) : n
 
-    return formats[format] ? formats[format](n) : n 
+    return String(result); 
 }
