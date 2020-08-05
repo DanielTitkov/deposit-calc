@@ -11,9 +11,9 @@ const DataInput = (props) => {
     // const inflationControlLabel = 'Учитывать инфляцию'
     // const inflationValueLabel = 'Среднегодовая инфляция'
     const mortgageRateLabel = 'Ставка по ипотеке'
-    const mortgagePeriodLabel = 'Срок кредиования (лет)'
+    const mortgagePeriodLabel = 'Срок кредитования (лет)'
     const depositRateLabel = 'Ставка по вкладу'
-    const assetPriceLabel = 'Цена актива (руб)'
+    const assetPriceLabel = 'Цена актива'
     const rentPriceLabel = 'Месяц аренды'
     const rentCoefLabel = 'Коэффициент стоимости аренды'
 
