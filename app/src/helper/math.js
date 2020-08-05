@@ -24,3 +24,7 @@ export const calculateDepositSums = (depositPeriod, monthlyDepositRate, contribu
     }
     return cumulativeSums;
 }
+
+export const percentToDecimal = (n) => (
+    n / 100
+);
