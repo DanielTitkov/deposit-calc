@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Header } from 'semantic-ui-react';
+import { Form } from 'semantic-ui-react';
 import { useDispatch } from 'react-redux';
 import { updateCalcInput } from '../../../store/actions/calcActions';
-import './DataInput.css';
 import { percentToDecimal } from '../../../helper/math';
-import { formatPriceInput } from '../../../helper/format';
 import NumberFormat from 'react-number-format';
+import './DataInput.css';
 
-const DataInput = (props) => {
+const DataInput = () => {
 
     const dispatch = useDispatch();
 
@@ -18,7 +17,7 @@ const DataInput = (props) => {
     const depositRateLabel = 'Процентная ставка по вкладу'
     const assetPriceLabel = 'Цена актива'
     const rentPriceLabel = 'Месяц аренды'
-    const rentCoefLabel = 'Коэффициент стоимости аренды'
+    // const rentCoefLabel = 'Коэффициент стоимости аренды'
 
     const [ inflationControl ] = useState(false);
     const [ inflationValue ] = useState(0);
@@ -32,11 +31,6 @@ const DataInput = (props) => {
     const handleRentPriceChange = (newPrice) => {
         setRentPrice(newPrice);
         setRentCoef(newPrice / assetPrice)
-    }
-
-    const handleRentCoefChange = (newCoef) => {
-        setRentCoef(newCoef);
-        setRentPrice(newCoef * assetPrice)
     }
 
     useEffect(() => {
@@ -86,6 +80,8 @@ const DataInput = (props) => {
                     value={ mortgagePeriod }
                     onValueChange={ values => setMortgagePeriod(values.floatValue) }
                 />
+            </Form.Group>
+            <Form.Group widths='equal'>
                 <NumberFormat
                     customInput={ Form.Input }
                     fluid 
@@ -95,8 +91,6 @@ const DataInput = (props) => {
                     onValueChange={ values => setAssetPrice(values.floatValue) }
                     thousandSeparator=" "
                 />
-            </Form.Group>
-            <Form.Group widths='equal'>
                 <NumberFormat
                     customInput={ Form.Input }
                     fluid 
@@ -105,15 +99,6 @@ const DataInput = (props) => {
                     value={ rentPrice }
                     thousandSeparator=" "
                     onValueChange={ values => handleRentPriceChange(values.floatValue) }
-                />
-                <Header as="h3" textAlign='center' className="data-input-inputs-separator">или</Header>
-                <NumberFormat
-                    customInput={ Form.Input }
-                    fluid
-                    label={ rentCoefLabel }
-                    placeholder={ rentCoefLabel }
-                    value={ rentCoef } 
-                    onValueChange={ values => handleRentCoefChange(values.floatValue) }
                 />
             </Form.Group>
             <p><i>Вид платежей по ипотеке: аннуитетные</i></p>
