@@ -5,10 +5,24 @@ import { updateCalcInput } from '../../../store/actions/calcActions';
 import { percentToDecimal } from '../../../helper/math';
 import NumberFormat from 'react-number-format';
 import './DataInput.css';
+import { parseQueryString } from '../../../helper/url';
 
 const DataInput = () => {
-
+    
     const dispatch = useDispatch();
+
+    const urlParams = parseQueryString(window.location.hash, true);
+    const ifGiven = (given, def) => (given ? given : def);
+    const inputData = {
+        inflationControl: ifGiven(urlParams && urlParams.inflationControl, false),
+        inflationValue: ifGiven(urlParams && urlParams.inflationValue, 0),
+        mortgageRate: ifGiven(urlParams && urlParams.mortgageRate, 8),
+        mortgagePeriod: ifGiven(urlParams && urlParams.mortgagePeriod, 15),
+        assetPrice: ifGiven(urlParams && urlParams.assetPrice, 5000000),
+        rentPrice: ifGiven(urlParams && urlParams.rentPrice, 25000),
+        rentCoef: ifGiven(urlParams && urlParams.rentCoef, 0.005),
+        depositRate: ifGiven(urlParams && urlParams.depositRate, 4),
+    }
 
     // const inflationControlLabel = 'Учитывать инфляцию'
     // const inflationValueLabel = 'Среднегодовая инфляция'
@@ -19,14 +33,14 @@ const DataInput = () => {
     const rentPriceLabel = 'Месяц аренды'
     // const rentCoefLabel = 'Коэффициент стоимости аренды'
 
-    const [ inflationControl ] = useState(false);
-    const [ inflationValue ] = useState(0);
-    const [ mortgageRate, setMortgageRate ] = useState(8);
-    const [ mortgagePeriod, setMortgagePeriod ] = useState(15);
-    const [ assetPrice, setAssetPrice ] = useState(5000000);
-    const [ rentPrice, setRentPrice ] = useState(25000);
-    const [ rentCoef, setRentCoef ] = useState(0.005);
-    const [ depositRate, setDepositRate ] = useState(4);
+    const [ inflationControl ] = useState(inputData && inputData.inflationControl);
+    const [ inflationValue ] = useState(inputData && inputData.inflationValue);
+    const [ mortgageRate, setMortgageRate ] = useState(inputData && inputData.mortgageRate);
+    const [ mortgagePeriod, setMortgagePeriod ] = useState(inputData && inputData.mortgagePeriod);
+    const [ assetPrice, setAssetPrice ] = useState(inputData && inputData.assetPrice);
+    const [ rentPrice, setRentPrice ] = useState(inputData && inputData.rentPrice);
+    const [ rentCoef, setRentCoef ] = useState(inputData && inputData.rentCoef);
+    const [ depositRate, setDepositRate ] = useState(inputData && inputData.depositRate);
 
     const handleRentPriceChange = (newPrice) => {
         setRentPrice(newPrice);
@@ -47,6 +61,7 @@ const DataInput = () => {
         dispatch(updateCalcInput(inputData));
     }, [
         dispatch, 
+        inputData,
         inflationControl, mortgageRate, mortgagePeriod, assetPrice, 
         rentPrice, rentCoef, depositRate, inflationValue,
     ]);
