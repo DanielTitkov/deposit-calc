@@ -3,6 +3,7 @@ import { Menu, Button, Modal, Header, Icon, Message } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import { parseQueryString } from '../../../helper/url';
 import querystring from 'querystring';
+import config from '../../../config/config';
 
 const Controls = () => {
 
@@ -11,7 +12,7 @@ const Controls = () => {
 
     const buildExportUrl = (inputData) => {
         const urlParams = parseQueryString(window.location.search, false)
-        const appId = urlParams && urlParams["vk_app_id"]
+        const appId = (urlParams && urlParams["vk_app_id"]) || config.VK_APP_ID
         const baseUrl = `https://vk.com/app${appId}#hash/`
         const resultingParams = querystring.stringify(inputData)
         return baseUrl + "?" + resultingParams

@@ -19,6 +19,7 @@ const config = {
         RENT_PRICE: 'Месяц аренды',
         RENT_COEF: 'Коэффициент стоимости аренды', // not used by now
     },
+    VK_APP_ID: "7558666",
 };
 
 export default config;
