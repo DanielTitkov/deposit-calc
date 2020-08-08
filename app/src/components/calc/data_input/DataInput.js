@@ -4,8 +4,9 @@ import { useDispatch } from 'react-redux';
 import { updateCalcInput } from '../../../store/actions/calcActions';
 import { percentToDecimal } from '../../../helper/math';
 import NumberFormat from 'react-number-format';
-import './DataInput.css';
 import { parseQueryString } from '../../../helper/url';
+import config from '../../../config/config';
+import './DataInput.css';
 
 const DataInput = () => {
     
@@ -14,24 +15,14 @@ const DataInput = () => {
     const urlParams = parseQueryString(window.location.hash, true);
     const ifGiven = (given, def) => (given ? given : def);
     const inputData = {
-        inflationControl: ifGiven(urlParams && urlParams.inflationControl, false),
-        inflationValue: ifGiven(urlParams && urlParams.inflationValue, 0),
-        mortgageRate: ifGiven(urlParams && urlParams.mortgageRate, 8),
-        mortgagePeriod: ifGiven(urlParams && urlParams.mortgagePeriod, 15),
-        assetPrice: ifGiven(urlParams && urlParams.assetPrice, 5000000),
-        rentPrice: ifGiven(urlParams && urlParams.rentPrice, 25000),
-        rentCoef: ifGiven(urlParams && urlParams.rentCoef, 0.005),
-        depositRate: ifGiven(urlParams && urlParams.depositRate, 4),
+        inflationControl: ifGiven(urlParams && urlParams.inflationControl, config.defaults.INFLATION_CONTROL),
+        inflationValue: ifGiven(urlParams && urlParams.inflationValue, config.defaults.INFLATION_VALUE),
+        mortgageRate: ifGiven(urlParams && urlParams.mortgageRate, config.defaults.MORTGAGE_RATE),
+        mortgagePeriod: ifGiven(urlParams && urlParams.mortgagePeriod, config.defaults.MORTGAGE_PERIOD),
+        assetPrice: ifGiven(urlParams && urlParams.assetPrice, config.defaults.ASSET_PRICE),
+        rentPrice: ifGiven(urlParams && urlParams.rentPrice, config.defaults.RENT_PRICE),
+        depositRate: ifGiven(urlParams && urlParams.depositRate, config.defaults.DEPOSIT_RATE),
     }
-
-    // const inflationControlLabel = 'Учитывать инфляцию'
-    // const inflationValueLabel = 'Среднегодовая инфляция'
-    const mortgageRateLabel = 'Процентная ставка по ипотеке'
-    const mortgagePeriodLabel = 'Срок кредитования (лет)'
-    const depositRateLabel = 'Процентная ставка по вкладу'
-    const assetPriceLabel = 'Цена актива'
-    const rentPriceLabel = 'Месяц аренды'
-    // const rentCoefLabel = 'Коэффициент стоимости аренды'
 
     const [ inflationControl ] = useState(inputData && inputData.inflationControl);
     const [ inflationValue ] = useState(inputData && inputData.inflationValue);
@@ -39,12 +30,10 @@ const DataInput = () => {
     const [ mortgagePeriod, setMortgagePeriod ] = useState(inputData && inputData.mortgagePeriod);
     const [ assetPrice, setAssetPrice ] = useState(inputData && inputData.assetPrice);
     const [ rentPrice, setRentPrice ] = useState(inputData && inputData.rentPrice);
-    const [ rentCoef, setRentCoef ] = useState(inputData && inputData.rentCoef);
     const [ depositRate, setDepositRate ] = useState(inputData && inputData.depositRate);
 
     const handleRentPriceChange = (newPrice) => {
         setRentPrice(newPrice);
-        setRentCoef(newPrice / assetPrice)
     }
 
     useEffect(() => {
@@ -54,7 +43,6 @@ const DataInput = () => {
             mortgagePeriod: parseFloat(mortgagePeriod),
             assetPrice: parseFloat(assetPrice),
             rentPrice: parseFloat(rentPrice),
-            rentCoef: parseFloat(rentCoef),
             depositRate: percentToDecimal(parseFloat(depositRate)),
             inflationValue: parseFloat(inflationValue),
         }
@@ -62,8 +50,8 @@ const DataInput = () => {
     }, [
         dispatch, 
         inputData,
-        inflationControl, mortgageRate, mortgagePeriod, assetPrice, 
-        rentPrice, rentCoef, depositRate, inflationValue,
+        inflationControl, mortgageRate, mortgagePeriod, 
+        assetPrice, rentPrice, depositRate, inflationValue,
     ]);
 
     return (
@@ -72,8 +60,8 @@ const DataInput = () => {
                 <NumberFormat
                     customInput={ Form.Input }
                     fluid 
-                    label={ mortgageRateLabel } 
-                    placeholder={ mortgageRateLabel } 
+                    label={ config.labels.MORTGAGE_RATE } 
+                    placeholder={ config.labels.MORTGAGE_RATE } 
                     value={ mortgageRate }
                     icon='percent'
                     onValueChange={ values => setMortgageRate(values.floatValue) }
@@ -81,8 +69,8 @@ const DataInput = () => {
                 <NumberFormat
                     customInput={ Form.Input }
                     fluid 
-                    label={ depositRateLabel } 
-                    placeholder={ depositRateLabel }
+                    label={ config.labels.DEPOSIT_RATE } 
+                    placeholder={ config.labels.DEPOSIT_RATE }
                     value={ depositRate }
                     icon='percent'
                     onValueChange={ values => setDepositRate(values.floatValue) }
@@ -90,8 +78,8 @@ const DataInput = () => {
                 <NumberFormat
                     customInput={ Form.Input }
                     fluid 
-                    label={ mortgagePeriodLabel } 
-                    placeholder={ mortgagePeriodLabel }
+                    label={ config.labels.MORTGAGE_PERIOD } 
+                    placeholder={ config.labels.MORTGAGE_PERIOD }
                     value={ mortgagePeriod }
                     onValueChange={ values => setMortgagePeriod(values.floatValue) }
                 />
@@ -100,8 +88,8 @@ const DataInput = () => {
                 <NumberFormat
                     customInput={ Form.Input }
                     fluid 
-                    label={ assetPriceLabel } 
-                    placeholder={ assetPriceLabel }
+                    label={ config.labels.ASSET_PRICE } 
+                    placeholder={ config.labels.ASSET_PRICE }
                     value={ assetPrice }
                     onValueChange={ values => setAssetPrice(values.floatValue) }
                     thousandSeparator=" "
@@ -109,8 +97,8 @@ const DataInput = () => {
                 <NumberFormat
                     customInput={ Form.Input }
                     fluid 
-                    label={ rentPriceLabel } 
-                    placeholder={ rentPriceLabel }
+                    label={ config.labels.RENT_PRICE } 
+                    placeholder={ config.labels.RENT_PRICE }
                     value={ rentPrice }
                     thousandSeparator=" "
                     onValueChange={ values => handleRentPriceChange(values.floatValue) }
