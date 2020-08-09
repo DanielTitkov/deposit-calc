@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { parseQueryString } from '../../../helper/url';
 import querystring from 'querystring';
 import config from '../../../config/config';
+import bridge from '@vkontakte/vk-bridge';
 
 const Controls = () => {
 
@@ -20,6 +21,15 @@ const Controls = () => {
 
     const handleExport = () => {
         setExportUrl(buildExportUrl(inputData))
+    }
+
+    const handleWallPost = () => {
+        setOpen(false);
+        bridge.send("VKWebAppShowWallPostBox", {
+            "message": config.labels.WALL_SHARE, 
+            "attachments": exportUrl, 
+            "copyright": exportUrl
+        });
     }
 
     const [open, setOpen] = React.useState(false)
@@ -45,6 +55,9 @@ const Controls = () => {
                 </Message>
             </Modal.Content>
             <Modal.Actions>
+                <Button color='blue' onClick={ handleWallPost }>
+                    <Icon name='vk' /> Сохранить на стене
+                </Button>
                 <Button color='green' onClick={() => setOpen(false)}>
                     <Icon name='checkmark' /> Закрыть
                 </Button>
