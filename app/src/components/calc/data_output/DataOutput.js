@@ -3,6 +3,10 @@ import { useSelector } from 'react-redux';
 import { round, calculateMonthlyLoanPayment, calculateDepositSums } from '../../../helper/math';
 import { Grid } from 'semantic-ui-react';
 import DataOutputTableBlock from '../data_output_table_block/DataOutputTableBlock';
+import DataOutputLineChart from '../data_output_line_chart/DataOutputLineChart';
+import DataOutputChartBlock from '../data_output_chart_block/DataOutputTableBlock';
+import DataOutputRadialChart from '../data_output_radial_chart/DataOutputRadialChart';
+
 
 const DataOutput = () => {
 
@@ -37,6 +41,36 @@ const DataOutput = () => {
     const assetCoveringPerc = round(depositResult / assetPrice, 3);
     const assetCoveringRemainder = depositResult - assetPrice;
 
+    // charts
+    // const data = [{ name: 'Page A', uv: 400, pv: 2400, amt: 2400 }, { name: 'Page B', uv: 800, pv: 2400, amt: 2400 }];
+    const depositChartData = depositSums.filter(
+        (_, i) => (i % 12 === 0)
+    ).map( (value, i) => (
+        {
+            name: `Год ${i}`,
+            deposit: value,
+            mortgage: monthlyMortgagePayment * i * 12,
+        }
+    ));
+
+    const sumsChartData = [
+        {
+            name: "Asset",
+            sum: assetPrice,
+            fill: "grey",
+        },
+        {
+            name: "Deposit",
+            sum: depositResult,
+            fill: "blue",
+        },
+        {
+            name: "Mortgage",
+            sum: totalMortgagePayment,
+            fill: "orange",
+        }
+    ].sort((b,a) => (a.sum > b.sum) ? 1 : ((b.sum > a.sum) ? -1 : 0)); 
+
     // outputs
     const mortgageData = {
         monthlyMortgagePayment: {
@@ -62,11 +96,6 @@ const DataOutput = () => {
     }
 
     const depositData = {
-        // monthlyDepositRate: {
-        //     label: "Месячная ставка по вкладу",
-        //     value: monthlyDepositRate,
-        //     format: "perc",
-        // },
         monthlyDepositContribution: {
             label: "Рассчетный размер взноса на вклад",
             value: monthlyDepositContribution,
@@ -162,6 +191,34 @@ const DataOutput = () => {
                                 Сколько еще останется или надо будет доплатить?"
                         />
                     </Grid.Column>
+
+                    <Grid.Column>
+                    <DataOutputChartBlock
+                            headerText="Ипотека и вклад"
+                            tooltipText="Покроет ли сумма на вкладе стоимость актива? 
+                                Сколько еще останется или надо будет доплатить?"
+                        >
+                            <DataOutputLineChart
+                                data={ depositChartData }
+                                depositKey="deposit"
+                                mortgageKey="mortgage"
+                                nameKey="name"
+                                assetPrice={ assetPrice }
+                            />
+                        </DataOutputChartBlock>
+                    </Grid.Column>      
+
+                    <Grid.Column>
+                        <DataOutputChartBlock
+                            headerText="Соотношение"
+                            tooltipText="Покроет ли сумма на вкладе стоимость актива? 
+                                Сколько еще останется или надо будет доплатить?"
+                        >
+                            <DataOutputRadialChart 
+                                data={ sumsChartData }
+                            />
+                        </DataOutputChartBlock>
+                    </Grid.Column>          
 
                 </Grid.Row>
             </Grid>

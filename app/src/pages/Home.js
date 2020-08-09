@@ -6,6 +6,7 @@ import UserSnippet from '../components/user/user_snippet/UserSnippet';
 import Controls from '../components/interface/controls/Controls';
 import Intro from '../components/interface/intro/Intro';
 import "./Home.css";
+import Footer from '../components/interface/footer/Footer';
 
 const Home = () => {
 	return (
@@ -16,6 +17,7 @@ const Home = () => {
             <DataInput />
             <Divider />
             <DataOutput />
+            <Footer />
         </Container>
 	)
 };
