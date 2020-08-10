@@ -5,7 +5,6 @@ import { Grid } from 'semantic-ui-react';
 import DataOutputTableBlock from '../data_output_table_block/DataOutputTableBlock';
 import DataOutputLineChart from '../data_output_line_chart/DataOutputLineChart';
 import DataOutputChartBlock from '../data_output_chart_block/DataOutputTableBlock';
-import DataOutputRadialChart from '../data_output_radial_chart/DataOutputRadialChart';
 
 
 const DataOutput = () => {
@@ -49,27 +48,11 @@ const DataOutput = () => {
         {
             name: `Год ${i}`,
             deposit: value,
+            depositContibutionSum: monthlyDepositContribution * i * 12,
+            depositIncomeSum: value - monthlyDepositContribution * i * 12,
             mortgage: monthlyMortgagePayment * i * 12,
         }
     ));
-
-    const sumsChartData = [
-        {
-            name: "Asset",
-            sum: assetPrice,
-            fill: "grey",
-        },
-        {
-            name: "Deposit",
-            sum: depositResult,
-            fill: "blue",
-        },
-        {
-            name: "Mortgage",
-            sum: totalMortgagePayment,
-            fill: "orange",
-        }
-    ].sort((b,a) => (a.sum > b.sum) ? 1 : ((b.sum > a.sum) ? -1 : 0)); 
 
     // outputs
     const mortgageData = {
@@ -190,37 +173,31 @@ const DataOutput = () => {
                             tooltipText="Покроет ли сумма на вкладе стоимость актива? 
                                 Сколько еще останется или надо будет доплатить?"
                         />
-                    </Grid.Column>
+                    </Grid.Column>        
 
+                </Grid.Row>
+
+                <Grid.Row columns={1}>
                     <Grid.Column>
-                    <DataOutputChartBlock
+                        <DataOutputChartBlock
                             headerText="Ипотека и вклад"
-                            tooltipText="Покроет ли сумма на вкладе стоимость актива? 
-                                Сколько еще останется или надо будет доплатить?"
+                            tooltipText="Графическое сравнение затрат на ипотеку 
+                                и суммы на вкладе к концу каждого года"
                         >
                             <DataOutputLineChart
                                 data={ depositChartData }
                                 depositKey="deposit"
                                 mortgageKey="mortgage"
                                 nameKey="name"
+                                depositIncomeSumKey="depositIncomeSum"
+                                depositContibutionSumKey="depositContibutionSum"
                                 assetPrice={ assetPrice }
                             />
                         </DataOutputChartBlock>
-                    </Grid.Column>      
-
-                    <Grid.Column>
-                        <DataOutputChartBlock
-                            headerText="Соотношение"
-                            tooltipText="Покроет ли сумма на вкладе стоимость актива? 
-                                Сколько еще останется или надо будет доплатить?"
-                        >
-                            <DataOutputRadialChart 
-                                data={ sumsChartData }
-                            />
-                        </DataOutputChartBlock>
-                    </Grid.Column>          
+                    </Grid.Column>    
 
                 </Grid.Row>
+
             </Grid>
         </>
     )
