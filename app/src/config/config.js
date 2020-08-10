@@ -21,6 +21,7 @@ const config = {
         WALL_SHARE: "Что выгоднее - ипотека или вклад? Вот что у меня получилось.",
     },
     VK_APP_ID: "7558666",
+    AUTHOR_LINK: "https://vk.com/delael",
 };
 
 export default config;

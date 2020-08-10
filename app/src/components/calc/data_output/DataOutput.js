@@ -3,6 +3,9 @@ import { useSelector } from 'react-redux';
 import { round, calculateMonthlyLoanPayment, calculateDepositSums } from '../../../helper/math';
 import { Grid } from 'semantic-ui-react';
 import DataOutputTableBlock from '../data_output_table_block/DataOutputTableBlock';
+import DataOutputLineChart from '../data_output_line_chart/DataOutputLineChart';
+import DataOutputChartBlock from '../data_output_chart_block/DataOutputTableBlock';
+
 
 const DataOutput = () => {
 
@@ -37,6 +40,20 @@ const DataOutput = () => {
     const assetCoveringPerc = round(depositResult / assetPrice, 3);
     const assetCoveringRemainder = depositResult - assetPrice;
 
+    // charts
+    // const data = [{ name: 'Page A', uv: 400, pv: 2400, amt: 2400 }, { name: 'Page B', uv: 800, pv: 2400, amt: 2400 }];
+    const depositChartData = depositSums.filter(
+        (_, i) => (i % 12 === 0)
+    ).map( (value, i) => (
+        {
+            name: `Год ${i}`,
+            deposit: value,
+            depositContibutionSum: monthlyDepositContribution * i * 12,
+            depositIncomeSum: value - monthlyDepositContribution * i * 12,
+            mortgage: monthlyMortgagePayment * i * 12,
+        }
+    ));
+
     // outputs
     const mortgageData = {
         monthlyMortgagePayment: {
@@ -62,11 +79,6 @@ const DataOutput = () => {
     }
 
     const depositData = {
-        // monthlyDepositRate: {
-        //     label: "Месячная ставка по вкладу",
-        //     value: monthlyDepositRate,
-        //     format: "perc",
-        // },
         monthlyDepositContribution: {
             label: "Рассчетный размер взноса на вклад",
             value: monthlyDepositContribution,
@@ -161,9 +173,31 @@ const DataOutput = () => {
                             tooltipText="Покроет ли сумма на вкладе стоимость актива? 
                                 Сколько еще останется или надо будет доплатить?"
                         />
-                    </Grid.Column>
+                    </Grid.Column>        
 
                 </Grid.Row>
+
+                <Grid.Row columns={1}>
+                    <Grid.Column>
+                        <DataOutputChartBlock
+                            headerText="Ипотека и вклад"
+                            tooltipText="Графическое сравнение затрат на ипотеку 
+                                и суммы на вкладе к концу каждого года"
+                        >
+                            <DataOutputLineChart
+                                data={ depositChartData }
+                                depositKey="deposit"
+                                mortgageKey="mortgage"
+                                nameKey="name"
+                                depositIncomeSumKey="depositIncomeSum"
+                                depositContibutionSumKey="depositContibutionSum"
+                                assetPrice={ assetPrice }
+                            />
+                        </DataOutputChartBlock>
+                    </Grid.Column>    
+
+                </Grid.Row>
+
             </Grid>
         </>
     )
