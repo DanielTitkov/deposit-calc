@@ -11,18 +11,21 @@ export const round = (value, precision) => {
     }
 } 
 
-export const calculateMonthlyLoanPayment = (assetPrice, loanPeriod, loanRate) => {
-    const monthlyLoanRate = loanRate / 12
-    return assetPrice*monthlyLoanRate*((1+monthlyLoanRate)**(loanPeriod*12))/(((1+monthlyLoanRate)**(loanPeriod*12))-1)
+export const calculateMonthlyLoanPayment = (assetPrice, loanPeriod, loanRate, initialPayment) => {
+    const monthlyLoanRate = loanRate / 12;
+    const mortgageSum = assetPrice - initialPayment;
+    return mortgageSum*monthlyLoanRate*((1+monthlyLoanRate)**(loanPeriod*12))/(((1+monthlyLoanRate)**(loanPeriod*12))-1)
 }
 
-export const calculateDepositSums = (depositPeriod, monthlyDepositRate, contribution) => {
-    let cumulativeSums = [0];
+export const calculateDepositSums = (depositPeriod, monthlyDepositRate, contribution, initialPayment) => {
+    let cumulativeSums = [initialPayment];
+    let incomes = [0];
     for (let i = 0; i < depositPeriod * 12; i++) {
         let income = cumulativeSums[i]*monthlyDepositRate;
+        incomes.push(income);
         cumulativeSums.push(cumulativeSums[i] + income + contribution);
     }
-    return cumulativeSums;
+    return [cumulativeSums, incomes];
 }
 
 export const percentToDecimal = (n) => (

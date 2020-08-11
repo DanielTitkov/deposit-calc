@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form } from 'semantic-ui-react';
+import { Form, Button, Grid } from 'semantic-ui-react';
 import { useDispatch } from 'react-redux';
 import { updateCalcInput } from '../../../store/actions/calcActions';
 import { percentToDecimal } from '../../../helper/math';
@@ -9,7 +9,7 @@ import config from '../../../config/config';
 import './DataInput.css';
 
 const DataInput = () => {
-    
+
     const dispatch = useDispatch();
 
     const urlParams = parseQueryString(window.location.hash, true);
@@ -22,15 +22,17 @@ const DataInput = () => {
         assetPrice: ifGiven(urlParams && urlParams.assetPrice, config.defaults.ASSET_PRICE),
         rentPrice: ifGiven(urlParams && urlParams.rentPrice, config.defaults.RENT_PRICE),
         depositRate: ifGiven(urlParams && urlParams.depositRate, config.defaults.DEPOSIT_RATE),
+        initialPayment: ifGiven(urlParams && urlParams.initialPayment, config.defaults.INITIAL_PAYMENT),
     }
 
-    const [ inflationControl ] = useState(inputData && inputData.inflationControl);
-    const [ inflationValue ] = useState(inputData && inputData.inflationValue);
-    const [ mortgageRate, setMortgageRate ] = useState(inputData && inputData.mortgageRate);
-    const [ mortgagePeriod, setMortgagePeriod ] = useState(inputData && inputData.mortgagePeriod);
-    const [ assetPrice, setAssetPrice ] = useState(inputData && inputData.assetPrice);
-    const [ rentPrice, setRentPrice ] = useState(inputData && inputData.rentPrice);
-    const [ depositRate, setDepositRate ] = useState(inputData && inputData.depositRate);
+    const [inflationControl] = useState(inputData && inputData.inflationControl);
+    const [inflationValue] = useState(inputData && inputData.inflationValue);
+    const [mortgageRate, setMortgageRate] = useState(inputData && inputData.mortgageRate);
+    const [mortgagePeriod, setMortgagePeriod] = useState(inputData && inputData.mortgagePeriod);
+    const [assetPrice, setAssetPrice] = useState(inputData && inputData.assetPrice);
+    const [rentPrice, setRentPrice] = useState(inputData && inputData.rentPrice);
+    const [depositRate, setDepositRate] = useState(inputData && inputData.depositRate);
+    const [initialPayment, setInitialPayment] = useState(inputData && inputData.initialPayment);
 
     const handleRentPriceChange = (newPrice) => {
         setRentPrice(newPrice);
@@ -39,74 +41,112 @@ const DataInput = () => {
     useEffect(() => {
         const inputData = {
             inflationControl: inflationControl,
-            mortgageRate:  percentToDecimal(parseFloat(mortgageRate)),
+            mortgageRate: percentToDecimal(parseFloat(mortgageRate)),
             mortgagePeriod: parseFloat(mortgagePeriod),
             assetPrice: parseFloat(assetPrice),
             rentPrice: parseFloat(rentPrice),
             depositRate: percentToDecimal(parseFloat(depositRate)),
             inflationValue: parseFloat(inflationValue),
+            initialPayment: parseFloat(initialPayment),
         }
         dispatch(updateCalcInput(inputData));
     }, [
-        dispatch, 
+        dispatch,
         inputData,
-        inflationControl, mortgageRate, mortgagePeriod, 
+        inflationControl, mortgageRate, mortgagePeriod,
         assetPrice, rentPrice, depositRate, inflationValue,
+        initialPayment,
     ]);
 
     return (
-        <Form>
-            <Form.Group widths='equal'>
-                <NumberFormat
-                    customInput={ Form.Input }
-                    fluid 
-                    label={ config.labels.MORTGAGE_RATE } 
-                    placeholder={ config.labels.MORTGAGE_RATE } 
-                    value={ mortgageRate }
-                    icon='percent'
-                    onValueChange={ values => setMortgageRate(values.floatValue) }
-                />
-                <NumberFormat
-                    customInput={ Form.Input }
-                    fluid 
-                    label={ config.labels.DEPOSIT_RATE } 
-                    placeholder={ config.labels.DEPOSIT_RATE }
-                    value={ depositRate }
-                    icon='percent'
-                    onValueChange={ values => setDepositRate(values.floatValue) }
-                />
-                <NumberFormat
-                    customInput={ Form.Input }
-                    fluid 
-                    label={ config.labels.MORTGAGE_PERIOD } 
-                    placeholder={ config.labels.MORTGAGE_PERIOD }
-                    value={ mortgagePeriod }
-                    onValueChange={ values => setMortgagePeriod(values.floatValue) }
-                />
-            </Form.Group>
-            <Form.Group widths='equal'>
-                <NumberFormat
-                    customInput={ Form.Input }
-                    fluid 
-                    label={ config.labels.ASSET_PRICE } 
-                    placeholder={ config.labels.ASSET_PRICE }
-                    value={ assetPrice }
-                    onValueChange={ values => setAssetPrice(values.floatValue) }
-                    thousandSeparator=" "
-                />
-                <NumberFormat
-                    customInput={ Form.Input }
-                    fluid 
-                    label={ config.labels.RENT_PRICE } 
-                    placeholder={ config.labels.RENT_PRICE }
-                    value={ rentPrice }
-                    thousandSeparator=" "
-                    onValueChange={ values => handleRentPriceChange(values.floatValue) }
-                />
-            </Form.Group>
-            <p><i>Вид платежей по ипотеке: аннуитетные</i></p>
-            <p><i>Вид процентов по вкладу: ежем. капитализация</i></p>
-        </Form>
+            <Grid stackable padded={false}>
+                <Grid.Row columns={3}>
+
+                    <Grid.Column className="data-input-field-wrapper">
+                        <NumberFormat
+                            customInput={Form.Input}
+                            fluid
+                            label={config.labels.MORTGAGE_RATE}
+                            placeholder={config.labels.MORTGAGE_RATE}
+                            value={mortgageRate}
+                            icon='percent'
+                            onValueChange={values => setMortgageRate(values.floatValue)}
+                        />
+                    </Grid.Column>
+                    <Grid.Column className="data-input-field-wrapper">
+                        <NumberFormat
+                            customInput={Form.Input}
+                            fluid
+                            label={config.labels.DEPOSIT_RATE}
+                            placeholder={config.labels.DEPOSIT_RATE}
+                            value={depositRate}
+                            icon='percent'
+                            onValueChange={values => setDepositRate(values.floatValue)}
+                        />
+                    </Grid.Column>
+                    <Grid.Column className="data-input-field-wrapper">
+                        <NumberFormat
+                            customInput={Form.Input}
+                            fluid
+                            label={config.labels.MORTGAGE_PERIOD}
+                            placeholder={config.labels.MORTGAGE_PERIOD}
+                            value={mortgagePeriod}
+                            onValueChange={values => setMortgagePeriod(values.floatValue)}
+                        />
+                    </Grid.Column>
+                </Grid.Row>
+
+                <Grid.Row columns={3}>
+                    <Grid.Column className="data-input-field-wrapper">
+                        <NumberFormat
+                            customInput={Form.Input}
+                            fluid
+                            label={config.labels.ASSET_PRICE}
+                            placeholder={config.labels.ASSET_PRICE}
+                            value={assetPrice}
+                            onValueChange={values => setAssetPrice(values.floatValue)}
+                            thousandSeparator=" "
+                        />
+                    </Grid.Column>
+                    <Grid.Column className="data-input-field-wrapper">
+                        <NumberFormat
+                            customInput={Form.Input}
+                            fluid
+                            label={config.labels.RENT_PRICE}
+                            placeholder={config.labels.RENT_PRICE}
+                            value={rentPrice}
+                            thousandSeparator=" "
+                            onValueChange={values => handleRentPriceChange(values.floatValue)}
+                        />
+                    </Grid.Column>
+                    <Grid.Column className="data-input-field-wrapper">
+                        <NumberFormat
+                            customInput={Form.Input}
+                            fluid
+                            label={config.labels.INITIAL_PAYMENT}
+                            placeholder={config.labels.INITIAL_PAYMENT}
+                            value={initialPayment}
+                            thousandSeparator=" "
+                            onValueChange={values => setInitialPayment(values.floatValue)}
+                        />
+                        <div className="data-input-field-buttons-wrapper">
+                            { config.interface.INITIAL_PAYMENT_RATES.map(e => (
+                                <Button 
+                                    primary
+                                    size="tiny"
+                                    onClick={ () => setInitialPayment(assetPrice * e) }
+                                    key={e}
+                                >
+                                    { e * 100 + "%" }
+                                </Button>
+                            )) }
+                        </div>
+                    </Grid.Column>
+                </Grid.Row>
+
+            {/* <p><i>Вид платежей по ипотеке: аннуитетные</i></p>
+            <p><i>Вид процентов по вкладу: ежем. капитализация</i></p> */}
+            </Grid>
     )
 }
 
