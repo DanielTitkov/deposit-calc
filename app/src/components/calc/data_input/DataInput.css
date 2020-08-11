@@ -3,3 +3,10 @@
     margin-bottom: 10px !important;
     margin-top: 5px !important;
 }
+
+.data-input-field-wrapper {
+}
+
+.data-input-field-buttons-wrapper {
+    margin-top: 7px;
+}

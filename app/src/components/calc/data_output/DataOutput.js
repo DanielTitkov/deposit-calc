@@ -16,9 +16,10 @@ const DataOutput = () => {
     const mortgageRate = inputData && inputData['mortgageRate'];
     const mortgagePeriod = inputData && inputData['mortgagePeriod'];
     const rentPrice = inputData && inputData['rentPrice'];
+    const initialPayment = inputData && inputData['initialPayment'];
 
     // mortgage
-    const monthlyMortgagePayment = round(calculateMonthlyLoanPayment(assetPrice, mortgagePeriod, mortgageRate), 3); 
+    const monthlyMortgagePayment = round(calculateMonthlyLoanPayment(assetPrice, mortgagePeriod, mortgageRate, initialPayment), 3); 
     const totalMortgagePayment = round(monthlyMortgagePayment * mortgagePeriod * 12);
     const mortgageOverpayment = totalMortgagePayment - assetPrice;
     const assetOverpaymentPerc = round(mortgageOverpayment / assetPrice, 4);
@@ -28,7 +29,7 @@ const DataOutput = () => {
     const depositContributionSum = monthlyDepositContribution * mortgagePeriod * 12;
     const rentPaymentsSum = rentPrice * mortgagePeriod * 12;
     const monthlyDepositRate = round(inputData && inputData['depositRate'] / 12, 5);
-    const depositSums = calculateDepositSums(mortgagePeriod, monthlyDepositRate, monthlyDepositContribution)
+    const [depositSums, depositIncomes] = calculateDepositSums(mortgagePeriod, monthlyDepositRate, monthlyDepositContribution, initialPayment)
     const depositResult = depositSums[depositSums.length-1];
     const depositIncome = depositResult - depositContributionSum;
 
@@ -44,15 +45,16 @@ const DataOutput = () => {
     // const data = [{ name: 'Page A', uv: 400, pv: 2400, amt: 2400 }, { name: 'Page B', uv: 800, pv: 2400, amt: 2400 }];
     const depositChartData = depositSums.filter(
         (_, i) => (i % 12 === 0)
-    ).map( (value, i) => (
-        {
+    ).map( (value, i) => {
+        return {
             name: `Год ${i}`,
             deposit: value,
-            depositContibutionSum: monthlyDepositContribution * i * 12,
-            depositIncomeSum: value - monthlyDepositContribution * i * 12,
-            mortgage: monthlyMortgagePayment * i * 12,
+            depositContibutionSum: monthlyDepositContribution * i * 12 + initialPayment,
+            depositIncomeSum: depositIncomes.slice(0,i*12).reduce((a, b) => a + b, 0),
+            mortgage: monthlyMortgagePayment * i * 12 + initialPayment,
         }
-    ));
+
+    });
 
     // outputs
     const mortgageData = {
