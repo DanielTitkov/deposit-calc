@@ -23,6 +23,7 @@ const DataInput = () => {
         rentPrice: ifGiven(urlParams && urlParams.rentPrice, config.defaults.RENT_PRICE),
         depositRate: ifGiven(urlParams && urlParams.depositRate, config.defaults.DEPOSIT_RATE),
         initialPayment: ifGiven(urlParams && urlParams.initialPayment, config.defaults.INITIAL_PAYMENT),
+        assetPriceIncreaseCoef: ifGiven(urlParams && urlParams.assetPriceIncreaseCoef, config.defaults.ASSET_PRICE_INCREASE_COEF),
     }
 
     const [inflationControl] = useState(inputData && inputData.inflationControl);
@@ -33,6 +34,7 @@ const DataInput = () => {
     const [rentPrice, setRentPrice] = useState(inputData && inputData.rentPrice);
     const [depositRate, setDepositRate] = useState(inputData && inputData.depositRate);
     const [initialPayment, setInitialPayment] = useState(inputData && inputData.initialPayment);
+    const [assetPriceIncreaseCoef, setAssetPriceIncreaseCoef] = useState(inputData && inputData.assetPriceIncreaseCoef);
 
     const handleRentPriceChange = (newPrice) => {
         setRentPrice(newPrice);
@@ -48,6 +50,7 @@ const DataInput = () => {
             depositRate: percentToDecimal(parseFloat(depositRate)),
             inflationValue: parseFloat(inflationValue),
             initialPayment: parseFloat(initialPayment),
+            assetPriceIncreaseCoef: percentToDecimal(parseFloat(assetPriceIncreaseCoef)),
         }
         dispatch(updateCalcInput(inputData));
     }, [
@@ -55,7 +58,7 @@ const DataInput = () => {
         inputData,
         inflationControl, mortgageRate, mortgagePeriod,
         assetPrice, rentPrice, depositRate, inflationValue,
-        initialPayment,
+        initialPayment, assetPriceIncreaseCoef
     ]);
 
     return (
@@ -141,6 +144,20 @@ const DataInput = () => {
                                 </Button>
                             )) }
                         </div>
+                    </Grid.Column>
+                </Grid.Row>
+
+                <Grid.Row columns={3}>
+                    <Grid.Column className="data-input-field-wrapper">
+                        <NumberFormat
+                            customInput={Form.Input}
+                            fluid
+                            label={config.labels.ASSET_PRICE_INCREASE_COEF}
+                            placeholder={config.labels.ASSET_PRICE_INCREASE_COEF}
+                            value={assetPriceIncreaseCoef}
+                            onValueChange={values => setAssetPriceIncreaseCoef(values.floatValue)}
+                            icon='percent'
+                        />
                     </Grid.Column>
                 </Grid.Row>
 

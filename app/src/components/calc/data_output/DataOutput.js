@@ -17,6 +17,7 @@ const DataOutput = () => {
     const mortgagePeriod = inputData && inputData['mortgagePeriod'];
     const rentPrice = inputData && inputData['rentPrice'];
     const initialPayment = inputData && inputData['initialPayment'];
+    const assetPriceIncreaseCoef = inputData && inputData['assetPriceIncreaseCoef'];
 
     // mortgage
     const monthlyMortgagePayment = round(calculateMonthlyLoanPayment(assetPrice, mortgagePeriod, mortgageRate, initialPayment), 3); 
@@ -52,6 +53,7 @@ const DataOutput = () => {
             depositContibutionSum: monthlyDepositContribution * i * 12 + initialPayment,
             depositIncomeSum: depositIncomes.slice(0,i*12).reduce((a, b) => a + b, 0),
             mortgage: monthlyMortgagePayment * i * 12 + initialPayment,
+            assetPrice: assetPrice * (1+assetPriceIncreaseCoef)**i,
         }
 
     });
@@ -190,6 +192,7 @@ const DataOutput = () => {
                                 data={ depositChartData }
                                 depositKey="deposit"
                                 mortgageKey="mortgage"
+                                assetPriceKey="assetPrice"
                                 nameKey="name"
                                 depositIncomeSumKey="depositIncomeSum"
                                 depositContibutionSumKey="depositContibutionSum"
