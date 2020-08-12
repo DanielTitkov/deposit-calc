@@ -26,6 +26,7 @@ const config = {
     },
     interface: {
         INITIAL_PAYMENT_RATES: [0, 0.1, 0.15, 0.2, 0.3],
+        ALLOW_ADVANCED_FIELDS: true,
     },
     VK_APP_ID: "7558666",
     AUTHOR_LINK: "https://vk.com/delael",

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Grid } from 'semantic-ui-react';
+import { Form, Button, Grid, Icon } from 'semantic-ui-react';
 import { useDispatch } from 'react-redux';
 import { updateCalcInput } from '../../../store/actions/calcActions';
 import { percentToDecimal } from '../../../helper/math';
@@ -11,6 +11,8 @@ import './DataInput.css';
 const DataInput = () => {
 
     const dispatch = useDispatch();
+    const [showAdvancedFields, setShowAdancedFields] = useState(false);
+
 
     const urlParams = parseQueryString(window.location.hash, true);
     const ifGiven = (given, def) => (given ? given : def);
@@ -62,6 +64,7 @@ const DataInput = () => {
     ]);
 
     return (
+        <>
             <Grid stackable padded={false}>
                 <Grid.Row columns={3}>
 
@@ -133,37 +136,58 @@ const DataInput = () => {
                             onValueChange={values => setInitialPayment(values.floatValue)}
                         />
                         <div className="data-input-field-buttons-wrapper">
-                            { config.interface.INITIAL_PAYMENT_RATES.map(e => (
-                                <Button 
+                            {config.interface.INITIAL_PAYMENT_RATES.map(e => (
+                                <Button
                                     primary
                                     size="tiny"
-                                    onClick={ () => setInitialPayment(assetPrice * e) }
+                                    onClick={() => setInitialPayment(assetPrice * e)}
                                     key={e}
                                 >
-                                    { e * 100 + "%" }
+                                    {e * 100 + "%"}
                                 </Button>
-                            )) }
+                            ))}
                         </div>
                     </Grid.Column>
                 </Grid.Row>
 
-                <Grid.Row columns={3}>
-                    <Grid.Column className="data-input-field-wrapper">
-                        <NumberFormat
-                            customInput={Form.Input}
-                            fluid
-                            label={config.labels.ASSET_PRICE_INCREASE_COEF}
-                            placeholder={config.labels.ASSET_PRICE_INCREASE_COEF}
-                            value={assetPriceIncreaseCoef}
-                            onValueChange={values => setAssetPriceIncreaseCoef(values.floatValue)}
-                            icon='percent'
-                        />
-                    </Grid.Column>
-                </Grid.Row>
+                {config.interface.ALLOW_ADVANCED_FIELDS ? (
+                    <Grid.Row columns={1}>
+                        <Grid.Column className="data-input-field-wrapper">
+                            <Button 
+                                fluid
+                                primary
+                                basic
+                                className="data-input-button-centered"
+                                onClick={() => setShowAdancedFields(!showAdvancedFields)}
+                            >
+                                {showAdvancedFields ? "Скрыть" : "Показать"} дополнительные настройки
+                            </Button>
+                        </Grid.Column>
+                    </Grid.Row>
+                ) : null}
+
+                {showAdvancedFields ? (
+                    <Grid.Row columns={3}>
+                        <Grid.Column className="data-input-field-wrapper">
+                            <NumberFormat
+                                customInput={Form.Input}
+                                fluid
+                                label={config.labels.ASSET_PRICE_INCREASE_COEF}
+                                placeholder={config.labels.ASSET_PRICE_INCREASE_COEF}
+                                value={assetPriceIncreaseCoef}
+                                onValueChange={values => setAssetPriceIncreaseCoef(values.floatValue)}
+                                icon='percent'
+                            />
+                        </Grid.Column>
+                    </Grid.Row>
+                ) : null}
+
+
+            </Grid>
 
             {/* <p><i>Вид платежей по ипотеке: аннуитетные</i></p>
             <p><i>Вид процентов по вкладу: ежем. капитализация</i></p> */}
-            </Grid>
+        </>
     )
 }
 
