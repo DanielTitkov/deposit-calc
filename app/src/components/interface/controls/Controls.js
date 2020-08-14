@@ -68,9 +68,10 @@ const Controls = () => {
 
     return (
         <>
-            <Menu fixed="top" color="teal" widths={2}>
+            <Menu fixed="top" color="teal" widths={3}>
                 <Menu.Item header>Ипотека vs Вклад</Menu.Item>
                 <ExportModal />
+                <Menu.Item></Menu.Item>
             </Menu>
         </>
     )
