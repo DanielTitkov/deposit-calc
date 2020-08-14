@@ -21,12 +21,12 @@ const DataOutput = () => {
 
     // mortgage
     const monthlyMortgagePayment = round(calculateMonthlyLoanPayment(assetPrice, mortgagePeriod, mortgageRate, initialPayment), 3); 
-    const totalMortgagePayment = round(monthlyMortgagePayment * mortgagePeriod * 12);
+    const totalMortgagePayment = round(monthlyMortgagePayment * mortgagePeriod * 12) + initialPayment;
     const mortgageOverpayment = totalMortgagePayment - assetPrice;
     const assetOverpaymentPerc = round(mortgageOverpayment / assetPrice, 4);
     
     // deposit and rent
-    const monthlyDepositContribution = monthlyMortgagePayment - rentPrice;
+    const monthlyDepositContribution = (monthlyMortgagePayment > rentPrice) ? monthlyMortgagePayment - rentPrice : 0;
     const depositContributionSum = monthlyDepositContribution * mortgagePeriod * 12;
     const rentPaymentsSum = rentPrice * mortgagePeriod * 12;
     const monthlyDepositRate = round(inputData && inputData['depositRate'] / 12, 5);

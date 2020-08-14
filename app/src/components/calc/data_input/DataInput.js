@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Grid, Icon } from 'semantic-ui-react';
+import { Form, Button, Grid } from 'semantic-ui-react';
 import { useDispatch } from 'react-redux';
 import { updateCalcInput } from '../../../store/actions/calcActions';
 import { percentToDecimal } from '../../../helper/math';
@@ -153,7 +153,7 @@ const DataInput = () => {
                 {config.interface.ALLOW_ADVANCED_FIELDS ? (
                     <Grid.Row columns={1}>
                         <Grid.Column className="data-input-field-wrapper">
-                            <Button 
+                            <Button
                                 fluid
                                 primary
                                 basic
@@ -182,11 +182,20 @@ const DataInput = () => {
                     </Grid.Row>
                 ) : null}
 
+                <Grid.Row columns={1}>
+                    <Grid.Column className="data-input-field-wrapper">
+                        <p><i>Вид платежей по ипотеке: аннуитетные</i></p>
+                        <p><i>Вид процентов по вкладу: ежем. капитализация</i></p>
+                        <p><i>
+                            Калькулятор не учитывает изменение стоимости жилья и аренды, 
+                            право на вычеты и материнский капитал, а также стоимость ремонта
+                            и платежи по ЖКХ.
+                        </i></p>
+                    </Grid.Column>
+                </Grid.Row>
 
             </Grid>
 
-            {/* <p><i>Вид платежей по ипотеке: аннуитетные</i></p>
-            <p><i>Вид процентов по вкладу: ежем. капитализация</i></p> */}
         </>
     )
 }
