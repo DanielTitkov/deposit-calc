@@ -5,6 +5,7 @@ import { Grid } from 'semantic-ui-react';
 import DataOutputTableBlock from '../data_output_table_block/DataOutputTableBlock';
 import DataOutputLineChart from '../data_output_line_chart/DataOutputLineChart';
 import DataOutputChartBlock from '../data_output_chart_block/DataOutputTableBlock';
+import DecisionBlock from '../../decision_block/DecisionBlock';
 
 
 const DataOutput = () => {
@@ -137,6 +138,24 @@ const DataOutput = () => {
     return (
         <>
             <Grid stackable>
+                <Grid.Row columns={1}>
+                    <Grid.Column>
+                        <DecisionBlock 
+                            result={
+                                monthlyDepositContribution === 0 ? (
+                                    "mortgageLower"
+                                ) : (
+                                    depositResult > assetPrice ? (
+                                        "deposit"
+                                    ) : (
+                                        "mortgage"
+                                    )
+                                )
+                            }
+                        />
+                    </Grid.Column>
+                </Grid.Row>
+
                 <Grid.Row columns={2}>
 
                     <Grid.Column>
