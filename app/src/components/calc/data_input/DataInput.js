@@ -11,6 +11,8 @@ import './DataInput.css';
 const DataInput = () => {
 
     const dispatch = useDispatch();
+    const [showAdvancedFields, setShowAdancedFields] = useState(false);
+
 
     const urlParams = parseQueryString(window.location.hash, true);
     const ifGiven = (given, def) => (given ? given : def);
@@ -23,6 +25,7 @@ const DataInput = () => {
         rentPrice: ifGiven(urlParams && urlParams.rentPrice, config.defaults.RENT_PRICE),
         depositRate: ifGiven(urlParams && urlParams.depositRate, config.defaults.DEPOSIT_RATE),
         initialPayment: ifGiven(urlParams && urlParams.initialPayment, config.defaults.INITIAL_PAYMENT),
+        assetPriceIncreaseCoef: ifGiven(urlParams && urlParams.assetPriceIncreaseCoef, config.defaults.ASSET_PRICE_INCREASE_COEF),
     }
 
     const [inflationControl] = useState(inputData && inputData.inflationControl);
@@ -33,6 +36,7 @@ const DataInput = () => {
     const [rentPrice, setRentPrice] = useState(inputData && inputData.rentPrice);
     const [depositRate, setDepositRate] = useState(inputData && inputData.depositRate);
     const [initialPayment, setInitialPayment] = useState(inputData && inputData.initialPayment);
+    const [assetPriceIncreaseCoef, setAssetPriceIncreaseCoef] = useState(inputData && inputData.assetPriceIncreaseCoef);
 
     const handleRentPriceChange = (newPrice) => {
         setRentPrice(newPrice);
@@ -48,6 +52,7 @@ const DataInput = () => {
             depositRate: percentToDecimal(parseFloat(depositRate)),
             inflationValue: parseFloat(inflationValue),
             initialPayment: parseFloat(initialPayment),
+            assetPriceIncreaseCoef: percentToDecimal(parseFloat(assetPriceIncreaseCoef)),
         }
         dispatch(updateCalcInput(inputData));
     }, [
@@ -55,10 +60,11 @@ const DataInput = () => {
         inputData,
         inflationControl, mortgageRate, mortgagePeriod,
         assetPrice, rentPrice, depositRate, inflationValue,
-        initialPayment,
+        initialPayment, assetPriceIncreaseCoef
     ]);
 
     return (
+        <>
             <Grid stackable padded={false}>
                 <Grid.Row columns={3}>
 
@@ -130,23 +136,67 @@ const DataInput = () => {
                             onValueChange={values => setInitialPayment(values.floatValue)}
                         />
                         <div className="data-input-field-buttons-wrapper">
-                            { config.interface.INITIAL_PAYMENT_RATES.map(e => (
-                                <Button 
+                            {config.interface.INITIAL_PAYMENT_RATES.map(e => (
+                                <Button
                                     primary
                                     size="tiny"
-                                    onClick={ () => setInitialPayment(assetPrice * e) }
+                                    onClick={() => setInitialPayment(assetPrice * e)}
                                     key={e}
                                 >
-                                    { e * 100 + "%" }
+                                    {e * 100 + "%"}
                                 </Button>
-                            )) }
+                            ))}
                         </div>
                     </Grid.Column>
                 </Grid.Row>
 
-            {/* <p><i>Вид платежей по ипотеке: аннуитетные</i></p>
-            <p><i>Вид процентов по вкладу: ежем. капитализация</i></p> */}
+                {config.interface.ALLOW_ADVANCED_FIELDS ? (
+                    <Grid.Row columns={1}>
+                        <Grid.Column className="data-input-field-wrapper">
+                            <Button
+                                fluid
+                                primary
+                                basic
+                                className="data-input-button-centered"
+                                onClick={() => setShowAdancedFields(!showAdvancedFields)}
+                            >
+                                {showAdvancedFields ? "Скрыть" : "Показать"} дополнительные настройки
+                            </Button>
+                        </Grid.Column>
+                    </Grid.Row>
+                ) : null}
+
+                {showAdvancedFields ? (
+                    <Grid.Row columns={3}>
+                        <Grid.Column className="data-input-field-wrapper">
+                            <NumberFormat
+                                customInput={Form.Input}
+                                fluid
+                                label={config.labels.ASSET_PRICE_INCREASE_COEF}
+                                placeholder={config.labels.ASSET_PRICE_INCREASE_COEF}
+                                value={assetPriceIncreaseCoef}
+                                onValueChange={values => setAssetPriceIncreaseCoef(values.floatValue)}
+                                icon='percent'
+                            />
+                        </Grid.Column>
+                    </Grid.Row>
+                ) : null}
+
+                <Grid.Row columns={1}>
+                    <Grid.Column className="data-input-field-wrapper">
+                        <p><i>Вид платежей по ипотеке: аннуитетные</i></p>
+                        <p><i>Вид процентов по вкладу: ежем. капитализация</i></p>
+                        <p><i>
+                            Калькулятор не учитывает изменение стоимости жилья и аренды, 
+                            право на вычеты и материнский капитал, а также стоимость ремонта
+                            и платежи по ЖКХ.
+                        </i></p>
+                    </Grid.Column>
+                </Grid.Row>
+
             </Grid>
+
+        </>
     )
 }
 

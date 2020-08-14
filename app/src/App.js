@@ -6,18 +6,18 @@ import { getInputData } from './store/actions/urlActions';
 
 const App = () => {
 
-	const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
-	useEffect(() => {
-    dispatch(getCurrentUser());
-    dispatch(getInputData());
-	}, [dispatch])
+    useEffect(() => {
+        dispatch(getCurrentUser());
+        dispatch(getInputData());
+    }, [dispatch])
 
-  return (
-    <div className="App">
-      <Home />
-    </div>
-  );
+    return (
+        <div className="App">
+            <Home />
+        </div>
+    );
 }
 
 export default App;
