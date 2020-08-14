@@ -40,7 +40,7 @@ const Controls = () => {
             open={open}
             trigger={
                 <Menu.Item
-                    name='Экспорт результата'
+                    name='Экспорт'
                     onClick={handleExport}
                     icon='save'
                 />
