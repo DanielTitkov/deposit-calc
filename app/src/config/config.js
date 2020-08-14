@@ -5,8 +5,8 @@ const config = {
         MORTGAGE_RATE: 8,
         MORTGAGE_PERIOD: 15,
         DEPOSIT_RATE: 4,
-        ASSET_PRICE: 5000000,
-        RENT_PRICE: 25000,
+        ASSET_PRICE: 6000000,
+        RENT_PRICE: 30000,
         RENT_COEF: 0.005, // not used by now
         INITIAL_PAYMENT: 1000000,
         ASSET_PRICE_INCREASE_COEF: 0,
