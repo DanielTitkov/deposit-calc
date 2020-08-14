@@ -5,6 +5,7 @@ import { Grid } from 'semantic-ui-react';
 import DataOutputTableBlock from '../data_output_table_block/DataOutputTableBlock';
 import DataOutputLineChart from '../data_output_line_chart/DataOutputLineChart';
 import DataOutputChartBlock from '../data_output_chart_block/DataOutputTableBlock';
+import DecisionBlock from '../../decision_block/DecisionBlock';
 
 
 const DataOutput = () => {
@@ -17,15 +18,16 @@ const DataOutput = () => {
     const mortgagePeriod = inputData && inputData['mortgagePeriod'];
     const rentPrice = inputData && inputData['rentPrice'];
     const initialPayment = inputData && inputData['initialPayment'];
+    const assetPriceIncreaseCoef = inputData && inputData['assetPriceIncreaseCoef'];
 
     // mortgage
     const monthlyMortgagePayment = round(calculateMonthlyLoanPayment(assetPrice, mortgagePeriod, mortgageRate, initialPayment), 3); 
-    const totalMortgagePayment = round(monthlyMortgagePayment * mortgagePeriod * 12);
+    const totalMortgagePayment = round(monthlyMortgagePayment * mortgagePeriod * 12) + initialPayment;
     const mortgageOverpayment = totalMortgagePayment - assetPrice;
     const assetOverpaymentPerc = round(mortgageOverpayment / assetPrice, 4);
     
     // deposit and rent
-    const monthlyDepositContribution = monthlyMortgagePayment - rentPrice;
+    const monthlyDepositContribution = (monthlyMortgagePayment > rentPrice) ? monthlyMortgagePayment - rentPrice : 0;
     const depositContributionSum = monthlyDepositContribution * mortgagePeriod * 12;
     const rentPaymentsSum = rentPrice * mortgagePeriod * 12;
     const monthlyDepositRate = round(inputData && inputData['depositRate'] / 12, 5);
@@ -52,6 +54,7 @@ const DataOutput = () => {
             depositContibutionSum: monthlyDepositContribution * i * 12 + initialPayment,
             depositIncomeSum: depositIncomes.slice(0,i*12).reduce((a, b) => a + b, 0),
             mortgage: monthlyMortgagePayment * i * 12 + initialPayment,
+            assetPrice: assetPrice * (1+assetPriceIncreaseCoef)**i,
         }
 
     });
@@ -135,6 +138,24 @@ const DataOutput = () => {
     return (
         <>
             <Grid stackable>
+                <Grid.Row columns={1}>
+                    <Grid.Column>
+                        <DecisionBlock 
+                            result={
+                                monthlyDepositContribution === 0 ? (
+                                    "mortgageLower"
+                                ) : (
+                                    depositResult > assetPrice ? (
+                                        "deposit"
+                                    ) : (
+                                        "mortgage"
+                                    )
+                                )
+                            }
+                        />
+                    </Grid.Column>
+                </Grid.Row>
+
                 <Grid.Row columns={2}>
 
                     <Grid.Column>
@@ -190,6 +211,7 @@ const DataOutput = () => {
                                 data={ depositChartData }
                                 depositKey="deposit"
                                 mortgageKey="mortgage"
+                                assetPriceKey="assetPrice"
                                 nameKey="name"
                                 depositIncomeSumKey="depositIncomeSum"
                                 depositContibutionSumKey="depositContibutionSum"

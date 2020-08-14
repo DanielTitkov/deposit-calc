@@ -9,6 +9,7 @@ const config = {
         RENT_PRICE: 25000,
         RENT_COEF: 0.005, // not used by now
         INITIAL_PAYMENT: 1000000,
+        ASSET_PRICE_INCREASE_COEF: 0,
     },
     labels: {
         INFLATION_CONTROL: 'Учитывать инфляцию',
@@ -17,13 +18,15 @@ const config = {
         INITIAL_PAYMENT: "Первоначальный взнос",
         MORTGAGE_PERIOD: 'Срок кредитования (лет)',
         DEPOSIT_RATE: 'Процентная ставка по вкладу',
-        ASSET_PRICE: 'Цена актива',
+        ASSET_PRICE: 'Цена актива (квартиры)',
         RENT_PRICE: 'Месяц аренды',
         RENT_COEF: 'Коэффициент стоимости аренды', // not used by now
         WALL_SHARE: "Что выгоднее - ипотека или вклад? Вот что у меня получилось.",
+        ASSET_PRICE_INCREASE_COEF: "Годовое удорожание актива",
     },
     interface: {
         INITIAL_PAYMENT_RATES: [0, 0.1, 0.15, 0.2, 0.3],
+        ALLOW_ADVANCED_FIELDS: false,
     },
     VK_APP_ID: "7558666",
     AUTHOR_LINK: "https://vk.com/delael",
