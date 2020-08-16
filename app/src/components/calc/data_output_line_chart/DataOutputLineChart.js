@@ -21,7 +21,7 @@ const DataOutputLineChart = ({
         return [value, name, props]
     }
     return data ? (
-        <ResponsiveContainer height={400} debounce={1}>
+        <ResponsiveContainer height={400} width="99%">
             <ComposedChart  
                     data={data}
                     margin={{
