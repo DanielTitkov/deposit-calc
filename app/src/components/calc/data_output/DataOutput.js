@@ -115,10 +115,12 @@ const DataOutput = () => {
         mortgageAssetPayback: {
             label: "Срок окупаемости актива в годах (ипотека)",
             value: mortgageAssetPayback,
+            format: "years",
         },
         pureAssetPayback: {
             label: "Срок окупаемости актива в годах (без переплаты)",
             value: pureAssetPayback,
+            format: "years",
         },
     }
 

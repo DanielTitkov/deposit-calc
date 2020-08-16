@@ -1,5 +1,5 @@
 const asMoney = (n) => {
-    return parseFloat(n).toFixed(0).replace(/(\d)(?=(\d{3})+\.)/g, "$1 ").replace('.', ',');
+    return parseFloat(n).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1 ").replace('.', ',');
 }
 
 const asPerc = (n) => {

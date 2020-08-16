@@ -1,8 +1,7 @@
 import React from 'react'
 import { Table } from 'semantic-ui-react'
-import { asFormat } from '../../../helper/format';
-import "./DataOutputTable.css"
 import DataOutputValue from '../data_output_number/DataOutputValue';
+import "./DataOutputTable.css"
 
 const DataOutputTable = ({ data, color }) => (
     <div className="data-output-table">
@@ -21,8 +20,7 @@ const DataOutputTable = ({ data, color }) => (
                         <Table.Cell textAlign='right'>
                             <DataOutputValue
                                 value={data[key]['value']}
-                                max={10000000000}
-                                min={0}
+                                format={data[key]['format']}
                             />
                         </Table.Cell>
                     </Table.Row>
