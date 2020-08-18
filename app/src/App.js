@@ -3,6 +3,7 @@ import Home from './pages/Home';
 import { useDispatch } from 'react-redux';
 import { getCurrentUser } from './store/actions/userActions';
 import { getInputData } from './store/actions/urlActions';
+import './App.css';
 
 const App = () => {
 
