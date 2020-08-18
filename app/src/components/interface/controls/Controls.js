@@ -71,11 +71,11 @@ const Controls = () => {
         <>
             <Menu fixed="top" color="teal" borderless widths={3}>
                 <Menu.Item header>
-                    Ипотека vs Вклад
+                    Ипотека/Вклад&nbsp;
                     <Popup
                         flowing
                         hoverable
-                        trigger={<span>&nbsp;<Icon name='question circle outline' /></span>}
+                        trigger={<span><Icon name='question circle outline' /></span>}
                         content={ <Intro /> }
                         basic
                         inverted
