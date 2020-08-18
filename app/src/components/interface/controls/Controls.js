@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import { Menu, Button, Modal, Header, Icon, Message } from 'semantic-ui-react';
+import { Menu, Button, Modal, Header, Icon, Message, Popup } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import { parseQueryString } from '../../../helper/url';
 import querystring from 'querystring';
 import config from '../../../config/config';
 import bridge from '@vkontakte/vk-bridge';
+import Intro from '../intro/Intro';
 
 const Controls = () => {
 
@@ -69,7 +70,17 @@ const Controls = () => {
     return (
         <>
             <Menu fixed="top" color="teal" borderless widths={3}>
-                <Menu.Item header>Ипотека vs Вклад</Menu.Item>
+                <Menu.Item header>
+                    Ипотека vs Вклад
+                    <Popup
+                        flowing
+                        hoverable
+                        trigger={<span>&nbsp;<Icon name='question circle outline' /></span>}
+                        content={ <Intro /> }
+                        basic
+                        inverted
+                    />
+                </Menu.Item>
                 <ExportModal />
                 <Menu.Item></Menu.Item>
             </Menu>
