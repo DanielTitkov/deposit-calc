@@ -51,7 +51,7 @@ const Controls = () => {
             <Header icon='linkify' content="Ссылка на результат" />
             <Modal.Content>
                 <Message>
-                    <p>{exportUrl}</p>
+                    <p className="controls-export-url-wrapper">{exportUrl}</p>
                 </Message>
             </Modal.Content>
             <Modal.Actions>

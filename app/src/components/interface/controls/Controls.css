@@ -5,3 +5,8 @@
     z-index: 99;
     opacity: 0.7;
 }
+
+.controls-export-url-wrapper {
+    word-wrap: break-word;
+    display: inline-block;
+}
