@@ -5,7 +5,7 @@ import { Header } from 'semantic-ui-react';
 const Footer = () => {
     return (
         <>
-            <Header disabled as='h5' textAlign='left'>
+            <Header disabled as='h6' textAlign='left'>
                 <p>Вид платежей по ипотеке: аннуитетные. Вид процентов по вкладу: ежемесячная капитализация.
                 Калькулятор не учитывает изменение стоимости жилья и аренды,
                 право на вычеты и материнский капитал, а также стоимость ремонта

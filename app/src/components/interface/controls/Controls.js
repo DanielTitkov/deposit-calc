@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { Menu, Button, Modal, Header, Icon, Message, Popup } from 'semantic-ui-react';
+import { Menu, Button, Modal, Header, Icon, Message } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import { parseQueryString } from '../../../helper/url';
 import querystring from 'querystring';
 import config from '../../../config/config';
 import bridge from '@vkontakte/vk-bridge';
-import Intro from '../intro/Intro';
+import './Controls.css';
 
 const Controls = () => {
 
@@ -27,8 +27,8 @@ const Controls = () => {
     const handleWallPost = () => {
         setOpen(false);
         bridge.send("VKWebAppShowWallPostBox", {
-            "message": config.labels.WALL_SHARE, 
-            "attachments": exportUrl, 
+            "message": config.labels.WALL_SHARE,
+            "attachments": exportUrl,
             "copyright": exportUrl
         });
     }
@@ -41,7 +41,6 @@ const Controls = () => {
             open={open}
             trigger={
                 <Menu.Item
-                    name='Экспорт'
                     onClick={handleExport}
                     icon='save'
                 />
@@ -56,7 +55,7 @@ const Controls = () => {
                 </Message>
             </Modal.Content>
             <Modal.Actions>
-                <Button color='blue' onClick={ handleWallPost }>
+                <Button color='blue' onClick={handleWallPost}>
                     <Icon name='vk' /> Сохранить на стене
                 </Button>
                 <Button color='green' onClick={() => setOpen(false)}>
@@ -68,23 +67,17 @@ const Controls = () => {
 
 
     return (
-        <>
-            <Menu fixed="top" color="teal" borderless widths={3}>
-                <Menu.Item header>
-                    Ипотека/Вклад&nbsp;
-                    <Popup
-                        flowing
-                        hoverable
-                        trigger={<span><Icon name='question circle outline' /></span>}
-                        content={ <Intro /> }
-                        basic
-                        inverted
-                    />
-                </Menu.Item>
+        <div className="controls-wrapper">
+            <Menu 
+                icon='labeled' 
+                vertical 
+                inverted 
+                size="mini"
+                compact
+            >
                 <ExportModal />
-                <Menu.Item></Menu.Item>
             </Menu>
-        </>
+        </div>
     )
 }
 

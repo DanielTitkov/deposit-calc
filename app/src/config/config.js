@@ -16,7 +16,7 @@ const config = {
         INFLATION_VALUE: 'Среднегодовая инфляция',
         MORTGAGE_RATE: 'Процентная ставка по ипотеке',
         INITIAL_PAYMENT: "Первоначальный взнос",
-        MORTGAGE_PERIOD: 'Срок кредитования (лет)',
+        MORTGAGE_PERIOD: 'Срок кредитования в годах',
         DEPOSIT_RATE: 'Процентная ставка по вкладу',
         ASSET_PRICE: 'Цена актива (квартиры)',
         RENT_PRICE: 'Месяц аренды',

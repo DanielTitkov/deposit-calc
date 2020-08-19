@@ -112,6 +112,7 @@ const DataInput = () => {
                             value={assetPrice}
                             onValueChange={values => setAssetPrice(values.floatValue)}
                             thousandSeparator=" "
+                            icon="ruble sign"
                         />
                     </Grid.Column>
                     <Grid.Column className="data-input-field-wrapper">
@@ -123,6 +124,7 @@ const DataInput = () => {
                             value={rentPrice}
                             thousandSeparator=" "
                             onValueChange={values => handleRentPriceChange(values.floatValue)}
+                            icon="ruble sign"
                         />
                     </Grid.Column>
                     <Grid.Column className="data-input-field-wrapper">
@@ -134,6 +136,7 @@ const DataInput = () => {
                             value={initialPayment}
                             thousandSeparator=" "
                             onValueChange={values => setInitialPayment(values.floatValue)}
+                            icon="ruble sign"
                         />
                         <div className="data-input-field-buttons-wrapper">
                             {config.interface.INITIAL_PAYMENT_RATES.map(e => (
