@@ -1,8 +1,8 @@
-const asMoney = (n) => {
-    return parseFloat(n).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, " ").replace('.', ',');
+export const asMoney = (n) => {
+    return parseFloat(n).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, String.fromCharCode(160)).replace('.', ',');
 }
 
-const asPerc = (n) => {
+export const asPerc = (n) => {
     return n * 100 + "%"
 }
 
@@ -13,5 +13,5 @@ export const asFormat = (n, format) => {
     }
     const result = formats[format] ? formats[format](n) : n
 
-    return String(result); 
+    return String(result);
 }
