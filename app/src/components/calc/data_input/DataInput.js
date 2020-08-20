@@ -7,6 +7,7 @@ import NumberFormat from 'react-number-format';
 import { parseQueryString } from '../../../helper/url';
 import config from '../../../config/config';
 import './DataInput.css';
+import TippedLabel from '../tipped_label/TippedLabel';
 
 const DataInput = () => {
 
@@ -42,6 +43,10 @@ const DataInput = () => {
         setRentPrice(newPrice);
     }
 
+    const checkLimit = (values, max, min = 0) => (
+        (values.floatValue <= max) && (values.floatValue >= min)
+    )
+
     useEffect(() => {
         const inputData = {
             inflationControl: inflationControl,
@@ -72,9 +77,16 @@ const DataInput = () => {
                         <NumberFormat
                             customInput={Form.Input}
                             fluid
-                            label={config.labels.MORTGAGE_RATE}
+                            label={
+                                <TippedLabel 
+                                    labelText={config.labels.MORTGAGE_RATE}
+                                    tooltipText={"Годовой процент по ипотеке"}
+                                    limits={[config.limits.MORTGAGE_RATE_MAX, config.limits.MORTGAGE_RATE_MIN]}
+                                />
+                            }
                             placeholder={config.labels.MORTGAGE_RATE}
                             value={mortgageRate}
+                            isAllowed={values => checkLimit(values, config.limits.MORTGAGE_RATE_MAX)}
                             icon='percent'
                             onValueChange={values => setMortgageRate(values.floatValue)}
                         />
@@ -83,9 +95,16 @@ const DataInput = () => {
                         <NumberFormat
                             customInput={Form.Input}
                             fluid
-                            label={config.labels.DEPOSIT_RATE}
+                            label={
+                                <TippedLabel 
+                                    labelText={config.labels.DEPOSIT_RATE}
+                                    tooltipText={"Годовой доход по вкладу и/или другим инвестициям"}
+                                    limits={[config.limits.DEPOSIT_RATE_MAX, config.limits.DEPOSIT_RATE_MIN]}
+                                />
+                            }
                             placeholder={config.labels.DEPOSIT_RATE}
                             value={depositRate}
+                            isAllowed={values => checkLimit(values, config.limits.MORTGAGE_RATE_MAX)}
                             icon='percent'
                             onValueChange={values => setDepositRate(values.floatValue)}
                         />
@@ -94,8 +113,19 @@ const DataInput = () => {
                         <NumberFormat
                             customInput={Form.Input}
                             fluid
-                            label={config.labels.MORTGAGE_PERIOD}
+                            label={
+                                <TippedLabel 
+                                    labelText={config.labels.MORTGAGE_PERIOD}
+                                    tooltipText={"Сколько лет придется платить по ипотеке"}
+                                    limits={[config.limits.MORTGAGE_PERIOD_MAX, config.limits.MORTGAGE_PERIOD_MIN]}
+                                />
+                            }
                             placeholder={config.labels.MORTGAGE_PERIOD}
+                            isAllowed={values => checkLimit(
+                                values,
+                                config.limits.MORTGAGE_PERIOD_MAX,
+                                config.limits.MORTGAGE_PERIOD_MIN
+                            )}
                             value={mortgagePeriod}
                             onValueChange={values => setMortgagePeriod(values.floatValue)}
                         />
@@ -107,8 +137,15 @@ const DataInput = () => {
                         <NumberFormat
                             customInput={Form.Input}
                             fluid
-                            label={config.labels.ASSET_PRICE}
+                            label={
+                                <TippedLabel 
+                                    labelText={config.labels.ASSET_PRICE}
+                                    tooltipText={"Полная стоимость квартиры"}
+                                    limits={[config.limits.ASSET_PRICE_MAX, config.limits.ASSET_PRICE_MIN]}
+                                />
+                            }
                             placeholder={config.labels.ASSET_PRICE}
+                            isAllowed={values => checkLimit(values, config.limits.ASSET_PRICE_MAX)}
                             value={assetPrice}
                             onValueChange={values => setAssetPrice(values.floatValue)}
                             thousandSeparator=" "
@@ -119,8 +156,15 @@ const DataInput = () => {
                         <NumberFormat
                             customInput={Form.Input}
                             fluid
-                            label={config.labels.RENT_PRICE}
+                            label={
+                                <TippedLabel 
+                                    labelText={config.labels.RENT_PRICE}
+                                    tooltipText={"Во сколько обойдется аренда, если не брать ипотеку"}
+                                    limits={[config.limits.RENT_PRICE_MAX, config.limits.RENT_PRICE_MIN]}
+                                />
+                            }
                             placeholder={config.labels.RENT_PRICE}
+                            isAllowed={values => checkLimit(values, config.limits.RENT_PRICE_MAX)}
                             value={rentPrice}
                             thousandSeparator=" "
                             onValueChange={values => handleRentPriceChange(values.floatValue)}
@@ -131,8 +175,15 @@ const DataInput = () => {
                         <NumberFormat
                             customInput={Form.Input}
                             fluid
-                            label={config.labels.INITIAL_PAYMENT}
+                            label={
+                                <TippedLabel 
+                                    labelText={config.labels.INITIAL_PAYMENT}
+                                    tooltipText={"В сценарии с вкладом эта сумма сразу помещается на вклад"}
+                                    limits={[config.limits.INITIAL_PAYMENT_MAX, config.limits.INITIAL_PAYMENT_MIN]}
+                                />
+                            }
                             placeholder={config.labels.INITIAL_PAYMENT}
+                            isAllowed={values => checkLimit(values, config.limits.INITIAL_PAYMENT_MAX)}
                             value={initialPayment}
                             thousandSeparator=" "
                             onValueChange={values => setInitialPayment(values.floatValue)}
